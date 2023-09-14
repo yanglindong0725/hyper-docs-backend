@@ -39,6 +39,18 @@ class UserDao {
     this.users.splice(objIndex, 1);
     return `${email} removed`;
   }
+
+  async findUserByEmailWithPassword(email: string) {
+    return this.prisma.user.findUnique({
+      where: { email },
+      select: {
+        id: true,
+        email: true,
+        password: true,
+        permissionFlags: true,
+      },
+    });
+  }
 }
 
 export default new UserDao();
