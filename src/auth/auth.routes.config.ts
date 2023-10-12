@@ -12,7 +12,7 @@ export class AuthRoutes extends CommonRoutesConfig {
   }
 
   configureRoutes(): express.Application {
-    this.app.post(`/auth`, [
+    this.app.post(`/api/v1/auth`, [
       body('email').isEmail(),
       body('password').isString().isLength({ min: 6, max: 18 }),
       BodyValidationMiddleware.verifyBodyFieldsErrors,
@@ -26,7 +26,7 @@ export class AuthRoutes extends CommonRoutesConfig {
       jwtMiddleware.validRefreshNeeded,
       authController.createJWT,
     ]);
-    
+
     return this.app;
   }
 }

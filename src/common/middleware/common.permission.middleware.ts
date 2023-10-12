@@ -12,11 +12,14 @@ class CommonPermissionMiddleware {
       next: express.NextFunction,
     ) => {
       try {
-        const userPermissionFlags = parseInt(res.locals.jwt.permissionFlags);
+        const userPermissionFlags = parseInt(res.locals.jwt.permission);
+        console.log('userPermissionFlags', userPermissionFlags);
+        console.log('requiredPermissionFlag', requiredPermissionFlag);
+        console.log(userPermissionFlags & requiredPermissionFlag);
         if (userPermissionFlags & requiredPermissionFlag) {
           next();
         } else {
-          res.status(403).send();
+          res.status(403).send('ddd');
         }
       } catch (e) {
         log(e);
@@ -29,7 +32,7 @@ class CommonPermissionMiddleware {
     res: express.Response,
     next: express.NextFunction,
   ) {
-    const userPermissionFlags = parseInt(res.locals.jwt.permissionFlags);
+    const userPermissionFlags = parseInt(res.locals.jwt.permission);
     if (
       req.params &&
       req.params.userId &&

@@ -12,12 +12,22 @@ class UsersService implements CRUD {
     return UsersDao.deleteUserByEmail(id);
   }
 
-  async list(limit: number, page: number) {
-    return UsersDao.getUsers();
+  async list(page: number, per_page: number) {
+    const skip = per_page * (page - 1);
+    const take = per_page;
+
+    try {
+      const list = await UsersDao.findUsers(skip, take);
+      const count = await UsersDao.findUserCount();
+      return { users: list, total: count };
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   }
 
   async readById(id: string) {
-    return UsersDao.getUserByEmail(id);
+    return UsersDao.findUserByEmail(id);
   }
 
   async putById(id: string, resource: PutUserDto) {
@@ -25,7 +35,7 @@ class UsersService implements CRUD {
   }
 
   async getUserByEmail(email: string) {
-    return UsersDao.getUserByEmail(email);
+    return UsersDao.findUserByEmail(email);
   }
 
   async getUserByEmailWithPassword(email: string) {

@@ -16,5 +16,5 @@ model User {
   updatedAt       DateTime  @updatedAt
   deletedAt       DateTime?
   avatar          String?
-  permissionFlags Int       @default(1)
+  permission Int @default(1)
 }

@@ -131,3 +131,7 @@ dist
 
 # docker mysql data
 db/
+
+.DS_Store/
+
+.vscode/ 

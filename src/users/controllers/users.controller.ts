@@ -7,7 +7,13 @@ const log: debug.IDebugger = debug('app:users-controller');
 
 class UsersController {
   async listUsers(req: express.Request, res: express.Response) {
-    const users = await usersService.list(100, 0);
+    const page = req.query.page ? Number(req.query.page) : 1;
+    const perPage = req.query.perPage ? Number(req.query.perPage) : 10;
+    const users = await usersService.list(page, perPage);
+    if (!users) {
+      res.status(500).send({ error: 'Internal Server Error' });
+      return;
+    }
     res.status(200).send(users);
   }
 

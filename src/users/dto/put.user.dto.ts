@@ -3,5 +3,5 @@ export interface PutUserDto {
   email: string;
   password: string;
   avatar_url: string;
-  permissionFlags: number;
+  permission: number;
 }

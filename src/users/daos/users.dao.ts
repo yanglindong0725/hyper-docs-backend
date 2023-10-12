@@ -20,12 +20,29 @@ class UserDao {
     return res;
   }
 
-  async getUsers() {
-    return this.users;
+  async findUsers(skip: number, take: number) {
+    return this.prisma.user.findMany({
+      skip,
+      take,
+      select: {
+        email: true,
+        name: true,
+        avatar: true,
+        createdAt: true,
+        updatedAt: true,
+        permission: true,
+      },
+    });
   }
 
-  async getUserByEmail(email: string) {
-    return this.users.find((user) => user.email === email);
+  async findUserCount() {
+    return this.prisma.user.count();
+  }
+
+  async findUserByEmail(email: string) {
+    return this.prisma.user.findUnique({
+      where: { email },
+    });
   }
 
   async putUserByEmail(email: string, user: CreateUserDto) {
@@ -47,7 +64,7 @@ class UserDao {
         id: true,
         email: true,
         password: true,
-        permissionFlags: true,
+        permission: true,
       },
     });
   }

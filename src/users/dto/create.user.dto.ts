@@ -3,5 +3,5 @@ export interface CreateUserDto {
   email: string;
   password: string;
   avatar_url?: string;
-  permissionFlags?: number;
+  permission?: number;
 }

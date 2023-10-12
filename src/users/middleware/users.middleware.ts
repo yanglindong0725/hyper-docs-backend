@@ -32,6 +32,19 @@ class UsersMiddleware {
     }
   }
 
+  async validateOtherAttributesAndGiveDefault(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction,
+  ) {
+    if (!req.body.permission) {
+      req.body.permission = 1;
+    }
+    if (!req.body.avatar) {
+      req.body.avatar = 'https://www.gravatar.com/avatar/';
+    }
+  }
+
   async validateUserExists(
     req: express.Request,
     res: express.Response,
@@ -63,8 +76,8 @@ class UsersMiddleware {
     next: express.NextFunction,
   ) {
     if (
-      'permissionFlags' in req.body &&
-      req.body.permissionFlags !== res.locals.user.permissionFlags
+      'permission' in req.body &&
+      req.body.permission !== res.locals.user.permission
     ) {
       res.status(400).send({
         errors: ['User cannot change permission flags'],

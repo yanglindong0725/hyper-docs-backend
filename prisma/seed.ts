@@ -17,7 +17,7 @@ async function main() {
       name: 'FxWallet Admin',
       password: password,
       avatar: 'https://avatars.githubusercontent.com/u/17406834?s=40&v=4',
-      permissionFlags: PermissionFlag.ALL_PERMISSIONS,
+      permission: PermissionFlag.ALL_PERMISSIONS,
     },
   });
 }

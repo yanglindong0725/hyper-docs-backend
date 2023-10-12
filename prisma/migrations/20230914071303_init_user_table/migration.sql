@@ -8,7 +8,7 @@ CREATE TABLE `User` (
     `updatedAt` DATETIME(3) NOT NULL,
     `deletedAt` DATETIME(3) NULL,
     `avatar` VARCHAR(191) NULL,
-    `permissionFlags` INTEGER NOT NULL DEFAULT 1,
+    `permission` INTEGER NOT NULL DEFAULT 1,
 
     UNIQUE INDEX `User_email_key`(`email`),
     PRIMARY KEY (`id`)
