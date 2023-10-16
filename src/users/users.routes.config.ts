@@ -8,6 +8,8 @@ import { CommonRoutesConfig } from '../common/common.routes.config';
 import { PermissionFlag } from '../common/middleware/common.permissionflag.enum';
 import { query, header, body } from 'express-validator';
 import { passwordVerify } from '../common/utils/validation';
+import usersController from './controllers/users.controller';
+import usersMiddleware from './middleware/users.middleware';
 
 export class UsersRoutes extends CommonRoutesConfig {
   constructor(app: express.Application) {
@@ -65,8 +67,14 @@ export class UsersRoutes extends CommonRoutesConfig {
       .delete(UsersController.removeUser);
 
     this.app.put(`${v1}/users/:userId`, [
-      UsersMiddleware.validateSameEmailBelongToSameUser,
+      body('email').isEmail().withMessage('Must be a valid email address').optional(),
+      body('password').custom(passwordVerify).optional(),
+      body('permission').isIn(Object.values(PermissionFlag)).optional(),
+      BodyValidationMiddleware.verifyBodyFieldsErrors,
+      // 这个中间件好像没用
+      // UsersMiddleware.validateSameEmailBelongToSameUser,
       UsersMiddleware.userCantChangePermission,
+      usersMiddleware.validateSameEmailDoesntExist,
       UsersController.put,
     ]);
 

@@ -13,9 +13,9 @@ class CommonPermissionMiddleware {
     ) => {
       try {
         const userPermissionFlags = parseInt(res.locals.jwt.permission);
-        console.log('userPermissionFlags', userPermissionFlags);
-        console.log('requiredPermissionFlag', requiredPermissionFlag);
-        console.log(userPermissionFlags & requiredPermissionFlag);
+        // console.log('userPermissionFlags', userPermissionFlags);
+        // console.log('requiredPermissionFlag', requiredPermissionFlag);
+        // console.log(userPermissionFlags & requiredPermissionFlag);
         if (userPermissionFlags & requiredPermissionFlag) {
           next();
         } else {
@@ -43,7 +43,7 @@ class CommonPermissionMiddleware {
       if (userPermissionFlags & PermissionFlag.ADMIN_PERMISSION) {
         return next();
       } else {
-        return res.status(403).send();
+        return res.status(403).send('bbb');
       }
     }
   }

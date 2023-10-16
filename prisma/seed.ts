@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client/edge';
 import * as argon2 from 'argon2';
 import { PermissionFlag } from '../src/common/middleware/common.permissionflag.enum';
 

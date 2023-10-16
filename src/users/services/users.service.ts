@@ -9,7 +9,7 @@ class UsersService implements CRUD {
   }
 
   async deleteById(id: string) {
-    return UsersDao.deleteUserByEmail(id);
+    return UsersDao.deleteUserById(id);
   }
 
   async list(page: number, per_page: number) {
@@ -21,17 +21,17 @@ class UsersService implements CRUD {
       const count = await UsersDao.findUserCount();
       return { users: list, total: count };
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return null;
     }
   }
 
   async readById(id: string) {
-    return UsersDao.findUserByEmail(id);
+    return UsersDao.findUserById(id);
   }
 
   async putById(id: string, resource: PutUserDto) {
-    return UsersDao.putUserByEmail(id, resource);
+    return UsersDao.putUserById(id, resource);
   }
 
   async getUserByEmail(email: string) {

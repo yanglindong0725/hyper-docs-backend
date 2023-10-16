@@ -55,7 +55,6 @@ app.get('/', (req: express.Request, res: express.Response) => {
 server.listen(process.env.PORT, () => {
   routes.forEach((route: CommonRoutesConfig) => {
     debugLog(`Routes configured for ${route.getName()}`);
-  });
-
+  });  
   console.log(runningMessage);
 });

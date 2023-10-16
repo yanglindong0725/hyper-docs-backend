@@ -62,16 +62,17 @@ class JwtMiddleware {
           return res.status(401).send();
         } else {
           res.locals.jwt = jwt.verify(authorization[1], jwtSecret) as Jwt;
-          console.log('res.locals.jwt', res.locals.jwt);
+          // console.log('res.locals.jwt', res.locals.jwt);
           next();
         }
       } catch (err) {
-        return res.status(403).send();
+        return res.status(403).send('ccc');
       }
     } else {
       return res.status(401).send();
     }
   }
+
 }
 
 export default new JwtMiddleware();

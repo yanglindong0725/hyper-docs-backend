@@ -39,6 +39,33 @@ class UserDao {
     return this.prisma.user.count();
   }
 
+  async findUserById(id: string) {
+    return await this.prisma.user.findUnique({
+      where: { id: Number(id) },
+    });
+  }
+
+  async deleteUserById(id: string) {
+    await this.prisma.user.delete({
+      where: { id: Number(id) },
+    });
+    return `${id} removed`;
+  }
+
+  async putUserById(id: string, user: CreateUserDto) {
+    await this.prisma.user.update({
+      where: { id: Number(id) },
+      data: {
+        email: user.email,
+        name: user.name,
+        password: user.password,
+        avatar: user.avatar_url,
+        permission:user.permission,
+      },
+    });
+    return `${user.email} updated via put`; 
+  }
+
   async findUserByEmail(email: string) {
     return this.prisma.user.findUnique({
       where: { email },

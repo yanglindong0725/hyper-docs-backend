@@ -1,6 +1,7 @@
 import express from 'express';
 import userService from '../services/users.service';
 import debug from 'debug';
+import { PermissionFlag } from '../../common/middleware/common.permissionflag.enum';
 
 const log: debug.IDebugger = debug('app:users-middlewares');
 
@@ -24,11 +25,18 @@ class UsersMiddleware {
     res: express.Response,
     next: express.NextFunction,
   ) {
-    const user = await userService.getUserByEmail(req.body.email);
-    if (user) {
-      res.status(400).send({ error: `User email already exists` });
-    } else {
-      next();
+    try {
+      if (!('email' in req.body)) {
+        next();
+      }
+      const user = await userService.getUserByEmail(req.body.email);
+      if (user && user.id !== Number(req.params.userId)) {
+        res.status(400).send({ error: `User email already exists` });
+      } else {
+        next();
+      }
+    } catch (error) {
+      // console.log(error);
     }
   }
 
@@ -43,6 +51,7 @@ class UsersMiddleware {
     if (!req.body.avatar) {
       req.body.avatar = 'https://www.gravatar.com/avatar/';
     }
+    next();
   }
 
   async validateUserExists(
@@ -77,7 +86,7 @@ class UsersMiddleware {
   ) {
     if (
       'permission' in req.body &&
-      req.body.permission !== res.locals.user.permission
+      !(PermissionFlag.ALL_PERMISSIONS & res.locals.jwt.permission)
     ) {
       res.status(400).send({
         errors: ['User cannot change permission flags'],
@@ -93,7 +102,7 @@ class UsersMiddleware {
     res: express.Response,
     next: express.NextFunction,
   ) {
-    if (res.locals.user.id === req.params.userId) {
+    if (res.locals.user.id === Number(req.params.userId)) {
       next();
     } else {
       res.status(400).send({ errors: ['Invalid email'] });

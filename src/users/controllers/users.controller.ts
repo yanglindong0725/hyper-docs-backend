@@ -2,6 +2,8 @@ import argon2 from 'argon2';
 import debug from 'debug';
 import express from 'express';
 import usersService from '../services/users.service';
+import { passwordVerify } from '../../common/utils/validation';
+import BodyValidationMiddleware from '../../common/middleware/body.validation.middleware';
 
 const log: debug.IDebugger = debug('app:users-controller');
 
@@ -23,19 +25,25 @@ class UsersController {
   }
 
   async createUser(req: express.Request, res: express.Response) {
-    req.body.password = await argon2.hash(req.body.password);
-    const userId = await usersService.create(req.body);
-    res.status(201).send({ id: userId });
+    try {
+      req.body.password = await argon2.hash(req.body.password);
+      const userId = await usersService.create(req.body);
+      res.status(201).send({ id: userId });
+    } catch (error) {
+      res.status(400).send(error);
+    }
   }
 
   async put(req: express.Request, res: express.Response) {
-    req.body.password = await argon2.hash(req.body.password);
-    log(await usersService.putById(req.body.id, req.body));
+    if (req.body.password) {
+      req.body.password = await argon2.hash(req.body.password);
+    }
+    // console.log(await usersService.putById(req.body.id, req.body));
     res.status(204).send();
   }
 
   async removeUser(req: express.Request, res: express.Response) {
-    log(await usersService.deleteById(req.body.id));
+    // console.log(await usersService.deleteById(req.body.id));
     res.status(204).send();
   }
 }
